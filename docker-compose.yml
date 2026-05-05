@@ -1,0 +1,14 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    container_name: amil-zakat-app
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    restart: always
+    # Wait for DB if it's on the same machine, but spec says DB is external
+    # environment:
+    #   - DATABASE_URL=mysql://root:pass@db:3306/amil_zakat
