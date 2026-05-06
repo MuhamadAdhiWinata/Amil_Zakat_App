@@ -8,7 +8,7 @@ async function seed() {
 
   // Clean up existing data
   const { campaigns, users, donations, categories } = schema
-  
+
   await db.delete(donations)
   await db.delete(campaigns)
   await db.delete(categories)
@@ -33,7 +33,7 @@ async function seed() {
   // Seed Admin User
   const adminId = crypto.randomUUID()
   const hashedAdminPassword = await bcrypt.hash('admin123', 10)
-  
+
   await db.insert(users).values({
     id: adminId,
     email: 'admin@amilzakat.com',
@@ -49,7 +49,7 @@ async function seed() {
       id: crypto.randomUUID(),
       title: 'Bantu Renovasi Panti Asuhan Harapan Baru yang Hampir Rubuh',
       description: 'Panti Asuhan Harapan Baru saat ini menampung 45 anak yatim dan piatu. Namun, kondisi bangunan panti sangat memprihatinkan. Atap bocor di mana-mana saat hujan, dan tembok mulai retak membahayakan anak-anak. Mari bersama-sama bantu renovasi Panti Asuhan ini agar anak-anak bisa tidur dan belajar dengan aman dan nyaman.',
-      image: 'https://images.unsplash.com/photo-1593113563332-e147ce827361?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      image: 'https://asset.kompas.com/crops/xeamtai9jP2M_k5l0nrrejllosA=/0x0:0x0/1200x800/data/photo/2025/12/22/69490c2ade111.jpg',
       targetAmount: '50000000',
       currentAmount: '15500000',
       status: 'active',
@@ -59,7 +59,7 @@ async function seed() {
       id: crypto.randomUUID(),
       title: 'Sedekah Air Bersih untuk Warga Desa Kekeringan',
       description: 'Krisis air bersih melanda desa-desa di pelosok. Warga harus berjalan berkilo-kilometer untuk mendapatkan air yang layak. Mari bantu bangun sumur bor dan instalasi air bersih untuk mereka.',
-      image: 'https://images.unsplash.com/photo-1541888078952-475267bfadcd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      image: 'https://indomgb.s3.amazonaws.com/wp-content/uploads/2021/04/22035539/1-air-bersih-ntt.jpg',
       targetAmount: '10000000',
       currentAmount: '3200000',
       status: 'active',
