@@ -7,15 +7,28 @@ async function seed() {
   console.log('Resetting and seeding database...')
 
   // Clean up existing data
-  const { campaigns, users, donations } = schema
+  const { campaigns, users, donations, categories } = schema
   
-  // Disable foreign key checks for truncation if needed, 
-  // but here we can just delete in order or use a raw sql
   await db.delete(donations)
   await db.delete(campaigns)
+  await db.delete(categories)
   await db.delete(users)
 
   console.log('Database cleared.')
+
+  // Seed Categories
+  const categoryData = [
+    { id: crypto.randomUUID(), name: 'Mendesak', slug: 'mendesak', icon: 'Flame' },
+    { id: crypto.randomUUID(), name: 'Bencana Alam', slug: 'bencana', icon: 'Landmark' },
+    { id: crypto.randomUUID(), name: 'Pendidikan', slug: 'pendidikan', icon: 'GraduationCap' },
+    { id: crypto.randomUUID(), name: 'Kesehatan', slug: 'kesehatan', icon: 'Stethoscope' },
+    { id: crypto.randomUUID(), name: 'Zakat', slug: 'zakat', icon: 'Wallet' },
+  ]
+
+  for (const cat of categoryData) {
+    await db.insert(categories).values(cat)
+  }
+  console.log('Categories seeded.')
 
   // Seed Admin User
   const adminId = crypto.randomUUID()
@@ -28,8 +41,6 @@ async function seed() {
     password: hashedAdminPassword,
     provider: 'credentials',
     role: 'super_admin'
-  }).onDuplicateKeyUpdate({
-    set: { name: 'Super Admin', password: hashedAdminPassword }
   })
 
   // Seed Campaigns
@@ -41,7 +52,8 @@ async function seed() {
       image: 'https://images.unsplash.com/photo-1593113563332-e147ce827361?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       targetAmount: '50000000',
       currentAmount: '15500000',
-      status: 'active'
+      status: 'active',
+      categoryId: categoryData[0].id // Mendesak
     },
     {
       id: crypto.randomUUID(),
@@ -50,7 +62,8 @@ async function seed() {
       image: 'https://images.unsplash.com/photo-1541888078952-475267bfadcd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       targetAmount: '10000000',
       currentAmount: '3200000',
-      status: 'active'
+      status: 'active',
+      categoryId: categoryData[1].id // Bencana
     },
     {
       id: crypto.randomUUID(),
@@ -59,7 +72,8 @@ async function seed() {
       image: 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       targetAmount: '5000000',
       currentAmount: '4800000',
-      status: 'active'
+      status: 'active',
+      categoryId: categoryData[2].id // Pendidikan
     }
   ]
 

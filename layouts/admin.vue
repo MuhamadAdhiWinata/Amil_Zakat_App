@@ -22,6 +22,11 @@
           <span class="text-[10px] font-medium">Donations</span>
         </NuxtLink>
 
+        <NuxtLink to="/admin/categories" class="flex flex-col items-center p-2 min-w-[64px] rounded-xl transition-all" :class="$route.path.startsWith('/admin/categories') ? 'text-primary' : 'text-slate-500 hover:text-slate-800'">
+          <Tag class="w-6 h-6 mb-1" :class="{ 'fill-primary/20 text-primary': $route.path.startsWith('/admin/categories') }" />
+          <span class="text-[10px] font-medium">Kategori</span>
+        </NuxtLink>
+
         <NuxtLink to="/" class="flex flex-col items-center p-2 min-w-[64px] rounded-xl transition-all text-slate-500 hover:text-slate-800">
           <Home class="w-6 h-6 mb-1" />
           <span class="text-[10px] font-medium">Public</span>
@@ -32,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { LayoutDashboard, Megaphone, Receipt, Home } from 'lucide-vue-next'
+import { LayoutDashboard, Megaphone, Receipt, Tag, Home } from 'lucide-vue-next'
 </script>
 
 <style scoped>

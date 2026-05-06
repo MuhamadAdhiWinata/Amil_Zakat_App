@@ -20,6 +20,14 @@
         </div>
 
         <div>
+          <label class="block text-sm font-bold text-slate-700 mb-2">Kategori</label>
+          <select v-model="form.categoryId" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none">
+            <option value="">Pilih Kategori</option>
+            <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
+          </select>
+        </div>
+
+        <div>
           <label class="block text-sm font-bold text-slate-700 mb-2">URL Gambar</label>
           <input v-model="form.image" type="url" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none" placeholder="https://example.com/image.jpg">
           <p class="text-xs text-slate-500 mt-1">Gunakan URL gambar (misal dari Unsplash).</p>
@@ -42,11 +50,14 @@ definePageMeta({
 const router = useRouter()
 const toast = useToast()
 
+const { data: categories } = useFetch<any[]>('/api/categories')
+
 const form = ref({
   title: '',
   description: '',
   targetAmount: '',
-  image: ''
+  image: '',
+  categoryId: ''
 })
 
 const isSubmitting = ref(false)

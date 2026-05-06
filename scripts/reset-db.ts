@@ -1,22 +1,22 @@
-import mysql from 'mysql2/promise'
+import { getDb } from '../server/db'
+import { sql } from 'drizzle-orm'
 import 'dotenv/config'
 
-async function resetDb() {
-  const connection = await mysql.createConnection({
-    uri: process.env.DATABASE_URL
-  })
-
-  console.log('Dropping tables...')
-  await connection.query('SET FOREIGN_KEY_CHECKS = 0')
-  await connection.query('DROP TABLE IF EXISTS payment_logs')
-  await connection.query('DROP TABLE IF EXISTS donations')
-  await connection.query('DROP TABLE IF EXISTS campaigns')
-  await connection.query('DROP TABLE IF EXISTS sessions')
-  await connection.query('DROP TABLE IF EXISTS users')
-  await connection.query('SET FOREIGN_KEY_CHECKS = 1')
-  
+async function dropAll() {
+  const db = getDb()
+  console.log('Dropping all tables...')
+  await db.execute(sql`SET FOREIGN_KEY_CHECKS = 0`)
+  await db.execute(sql`DROP TABLE IF EXISTS payment_logs`)
+  await db.execute(sql`DROP TABLE IF EXISTS donations`)
+  await db.execute(sql`DROP TABLE IF EXISTS campaigns`)
+  await db.execute(sql`DROP TABLE IF EXISTS categories`)
+  await db.execute(sql`DROP TABLE IF EXISTS users`)
+  await db.execute(sql`SET FOREIGN_KEY_CHECKS = 1`)
   console.log('Done.')
-  await connection.end()
+  process.exit(0)
 }
 
-resetDb().catch(console.error)
+dropAll().catch(err => {
+  console.error(err)
+  process.exit(1)
+})

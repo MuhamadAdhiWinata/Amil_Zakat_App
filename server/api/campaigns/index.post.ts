@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = await readBody(event)
-  const { title, description, targetAmount, image } = body
+  const { title, description, targetAmount, image, categoryId } = body
 
   if (!title || !description || !targetAmount) {
     throw createError({ statusCode: 400, message: 'Data tidak lengkap' })
@@ -32,6 +32,7 @@ export default defineEventHandler(async (event) => {
     description,
     targetAmount: targetAmount.toString(),
     image: image || null,
+    categoryId: categoryId || null,
     status: 'active'
   })
 

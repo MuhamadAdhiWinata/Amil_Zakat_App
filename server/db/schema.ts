@@ -11,6 +11,14 @@ export const users = mysqlTable('users', {
   createdAt: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
 })
 
+export const categories = mysqlTable('categories', {
+  id: varchar('id', { length: 36 }).primaryKey(),
+  name: varchar('name', { length: 100 }).notNull().unique(),
+  slug: varchar('slug', { length: 100 }).notNull().unique(),
+  icon: varchar('icon', { length: 50 }), // Lucide icon name
+  createdAt: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
+})
+
 export const campaigns = mysqlTable('campaigns', {
   id: varchar('id', { length: 36 }).primaryKey(),
   title: varchar('title', { length: 255 }).notNull(),
@@ -18,6 +26,7 @@ export const campaigns = mysqlTable('campaigns', {
   image: varchar('image', { length: 255 }),
   targetAmount: decimal('target_amount', { precision: 15, scale: 2 }).notNull(),
   currentAmount: decimal('current_amount', { precision: 15, scale: 2 }).notNull().default('0'),
+  categoryId: varchar('category_id', { length: 36 }),
   status: varchar('status', { length: 50 }).notNull().default('active'), // active, closed
   createdAt: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
 })

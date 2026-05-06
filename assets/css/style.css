@@ -1,13 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --color-primary: #0f766e;
-    --color-secondary: #64748b;
-    --color-danger: #dc2626;
-    --color-success: #16a34a;
+    --color-primary: #059669;
+    --color-primary-dark: #065f46;
+    --color-primary-light: #d1fae5;
+    --color-danger: #ef4444;
+    --color-success: #10b981;
     --color-warning: #f59e0b;
     --color-bg: #f8fafc;
     --color-surface: #ffffff;
@@ -16,8 +19,10 @@
   }
   
   body {
-    background-color: var(--color-bg);
+    background-color: #f1f5f9;
     color: var(--color-text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
@@ -25,7 +30,22 @@
   max-width: 420px;
   margin: 0 auto;
   min-height: 100vh;
-  background-color: var(--color-surface);
+  background-color: #ffffff;
   position: relative;
-  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+  box-shadow: 0 0 40px rgba(0,0,0,0.03);
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
