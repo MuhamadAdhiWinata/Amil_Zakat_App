@@ -13,17 +13,15 @@
       <div class="bg-white rounded-2xl p-4 shadow-sm mb-4">
         <label class="block text-sm font-bold text-slate-700 mb-3">Nominal Donasi</label>
         
-        <div class="relative mb-4">
-          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <span class="text-slate-500 font-bold text-lg">Rp</span>
-          </div>
-          <input 
-            v-model="amountRaw" 
-            type="number" 
-            class="block w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xl font-bold text-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-            placeholder="0"
-          >
-        </div>
+        <UiAppInput
+          v-model="amountRaw"
+          type="number"
+          prefix="Rp"
+          prefix-class="text-lg"
+          input-class="text-xl font-bold text-slate-800"
+          placeholder="0"
+          class="mb-4"
+        />
 
         <div class="grid grid-cols-2 gap-2">
           <button 
@@ -56,18 +54,16 @@
         </div>
 
         <div v-else class="space-y-3">
-          <input 
+          <UiAppInput 
             v-model="guestName"
             type="text" 
-            class="block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
             placeholder="Nama Lengkap"
-          >
-          <input 
+          />
+          <UiAppInput 
             v-model="guestEmail"
             type="email" 
-            class="block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
             placeholder="Email (opsional)"
-          >
+          />
         </div>
 
         <label class="flex items-center gap-2 mt-4 cursor-pointer">
@@ -78,10 +74,11 @@
     </div>
 
     <!-- Sticky Bottom CTA -->
-    <div class="fixed bottom-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
+    <div class="fixed bottom-16 left-0 right-0 z-40 flex justify-center pointer-events-none">
       <div class="w-full max-w-[420px] bg-white border-t border-slate-200 pointer-events-auto shadow-[0_-4px_10px_rgba(0,0,0,0.03)] p-4 pb-safe-bottom">
-        <UiAppButton full size="lg" @click="handleDonate" :disabled="!isValid">
-          Lanjutkan Pembayaran
+        <UiAppButton full size="lg" @click="handleDonate" :disabled="!isValid || isSubmitting">
+          <span v-if="isSubmitting">Memproses...</span>
+          <span v-else>Lanjutkan Pembayaran</span>
         </UiAppButton>
       </div>
     </div>
@@ -93,11 +90,14 @@ import { ArrowLeft } from 'lucide-vue-next'
 
 const { isLoggedIn, user } = useAuth()
 const router = useRouter()
+const route = useRoute()
+const toast = useToast()
 
 const amountRaw = ref('')
 const guestName = ref('')
 const guestEmail = ref('')
 const isAnonymous = ref(false)
+const isSubmitting = ref(false)
 
 const presets = [10000, 20000, 50000, 100000, 500000, 1000000]
 
@@ -112,10 +112,30 @@ const formatNumber = (num: number) => {
   return new Intl.NumberFormat('id-ID').format(num)
 }
 
-const handleDonate = () => {
-  // Mock redirection to success or Pakasir later
-  alert('Simulasi: Berhasil membuat donasi Rp ' + formatNumber(parseInt(amountRaw.value)))
-  router.push('/riwayat')
+const handleDonate = async () => {
+  if (!isValid.value) return
+  
+  isSubmitting.value = true
+  try {
+    const amount = parseInt(amountRaw.value)
+    const res = await $fetch('/api/donations', {
+      method: 'POST',
+      body: {
+        amount,
+        campaignId: route.params.id,
+        guestName: guestName.value,
+        guestEmail: guestEmail.value,
+        isAnonymous: isAnonymous.value
+      }
+    })
+    
+    toast.success('Donasi berhasil dibuat', 'Menuju halaman pembayaran...')
+    router.push(`/donasi/simulasi-pembayaran?id=${res.donationId}`)
+  } catch (err: any) {
+    toast.error('Gagal membuat donasi', err.data?.message || 'Terjadi kesalahan sistem')
+  } finally {
+    isSubmitting.value = false
+  }
 }
 </script>
 

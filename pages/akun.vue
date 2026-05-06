@@ -46,19 +46,79 @@
         </UiAppCard>
       </div>
 
-      <div v-else class="text-center py-12">
-        <div class="w-20 h-20 bg-slate-100 text-slate-400 flex items-center justify-center rounded-full mx-auto mb-6">
-          <User class="w-10 h-10" />
+      <div v-else class="max-w-md mx-auto">
+        <div class="text-center mb-8">
+          <div class="w-20 h-20 bg-slate-100 text-slate-400 flex items-center justify-center rounded-full mx-auto mb-4">
+            <UserIcon class="w-10 h-10" />
+          </div>
+          <h2 class="font-bold text-xl text-slate-800">{{ isRegister ? 'Daftar Akun' : 'Masuk' }}</h2>
+          <p class="text-sm text-slate-500">Silakan {{ isRegister ? 'buat akun baru' : 'masuk ke akun Anda' }} untuk berdonasi lebih mudah.</p>
         </div>
-        <h2 class="font-bold text-xl text-slate-800 mb-2">Belum Masuk</h2>
-        <p class="text-sm text-slate-500 mb-8 px-4">Masuk untuk melihat riwayat donasi dan mengelola profil Anda.</p>
-        
-        <UiAppButton @click="loginWithGoogle" full size="lg" class="mb-4">
+
+        <form @submit.prevent="handleSubmit" class="space-y-4">
+          <div v-if="isRegister">
+            <label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap</label>
+            <input 
+              v-model="form.name" 
+              type="text" 
+              required
+              class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+              placeholder="Masukkan nama lengkap"
+            >
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Email</label>
+            <input 
+              v-model="form.email" 
+              type="email" 
+              required
+              class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+              placeholder="email@contoh.com"
+            >
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+            <input 
+              v-model="form.password" 
+              type="password" 
+              required
+              class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+              placeholder="••••••••"
+            >
+          </div>
+
+          <div v-if="error" class="text-xs text-danger bg-red-50 p-3 rounded-lg border border-red-100">
+            {{ error }}
+          </div>
+
+          <UiAppButton :loading="loading" full size="lg" type="submit">
+            {{ isRegister ? 'Daftar Sekarang' : 'Masuk' }}
+          </UiAppButton>
+        </form>
+
+        <div class="mt-6 flex items-center justify-center gap-4 text-xs text-slate-400 uppercase tracking-widest before:content-[''] before:h-px before:flex-1 before:bg-slate-100 after:content-[''] after:h-px after:flex-1 after:bg-slate-100">
+          Atau
+        </div>
+
+        <button 
+          @click="loginWithGoogle"
+          class="mt-6 w-full flex items-center justify-center gap-3 px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-sm"
+        >
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5" />
           Masuk dengan Google
-        </UiAppButton>
+        </button>
+
+        <p class="mt-8 text-center text-sm text-slate-500">
+          {{ isRegister ? 'Sudah punya akun?' : 'Belum punya akun?' }}
+          <button @click="isRegister = !isRegister" class="text-primary font-bold hover:underline ml-1">
+            {{ isRegister ? 'Masuk di sini' : 'Daftar di sini' }}
+          </button>
+        </p>
 
         <div v-if="isDev" class="mt-8 pt-8 border-t border-dashed border-slate-200">
-          <p class="text-xs text-slate-400 mb-4">Mode Development</p>
+          <p class="text-xs text-slate-400 mb-4 text-center">Mode Development</p>
           <UiAppButton @click="loginAsMockAdmin" variant="outline" full size="sm">
             Mock Login (Admin)
           </UiAppButton>
@@ -69,8 +129,37 @@
 </template>
 
 <script setup lang="ts">
-import { User, Clock, LogOut, ChevronRight } from 'lucide-vue-next'
+import { User as UserIcon, Clock, LogOut, ChevronRight } from 'lucide-vue-next'
 
-const { user, isLoggedIn, isAdmin, pending, loginWithGoogle, loginAsMockAdmin, logout } = useAuth()
+const { user, isLoggedIn, isAdmin, pending, loginWithGoogle, loginAsMockAdmin, loginWithPassword, register, logout } = useAuth()
 const isDev = process.dev
+
+const isRegister = ref(false)
+const loading = ref(false)
+const error = ref('')
+const form = ref({
+  email: '',
+  password: '',
+  name: ''
+})
+
+const handleSubmit = async () => {
+  loading.value = true
+  error.value = ''
+  
+  let res
+  if (isRegister.value) {
+    res = await register(form.value)
+  } else {
+    res = await loginWithPassword({ email: form.value.email, password: form.value.password })
+  }
+
+  if (res.success) {
+    // Session is handled by useAuth refresh inside login/register functions
+  } else {
+    error.value = res.message || 'Terjadi kesalahan'
+  }
+  
+  loading.value = false
+}
 </script>

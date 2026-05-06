@@ -3,20 +3,29 @@
     <UiAppHeader title="Semua Program" />
     
     <div class="p-4">
-      <div class="grid gap-4">
-        <!-- Will map real data later, for now just reuse index list concept -->
-        <NuxtLink v-for="i in 5" :key="i" :to="`/campaign/${i}`">
-          <UiAppCard hover class="flex gap-4 p-3">
-            <div class="w-24 h-24 bg-slate-200 rounded-xl flex-shrink-0">
-               <img src="https://images.unsplash.com/photo-1593113563332-e147ce827361?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover rounded-xl" />
+      <div v-if="campaigns && campaigns.length > 0" class="grid gap-4">
+        <NuxtLink v-for="item in campaigns" :key="item.id" :to="`/campaign/${item.id}`">
+          <UiAppCard hover no-padding class="overflow-hidden flex gap-3 h-[110px]">
+            <div class="w-28 h-full bg-slate-200 shrink-0">
+               <img :src="item.image" class="w-full h-full object-cover" />
             </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="font-bold text-slate-800 text-sm mb-2 leading-snug line-clamp-2">Program Kebaikan {{ i }}</h3>
-              <UiAppProgress :current="1500000 * i" :target="10000000 * i" />
+            <div class="flex-1 p-3 min-w-0 flex flex-col justify-between">
+              <h3 class="font-bold text-slate-800 text-sm leading-snug line-clamp-2">{{ item.title }}</h3>
+              <UiAppProgress :current="item.currentAmount" :target="item.targetAmount" />
             </div>
           </UiAppCard>
         </NuxtLink>
       </div>
+      <div v-else-if="!pending" class="text-center py-12">
+        <p class="text-slate-500">Belum ada program donasi.</p>
+      </div>
+      <div v-else class="flex justify-center py-12">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+const { data: campaigns, pending } = useFetch<any[]>('/api/campaigns')
+</script>

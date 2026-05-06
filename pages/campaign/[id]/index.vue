@@ -42,9 +42,9 @@
     </div>
 
     <!-- Sticky Bottom CTA -->
-    <div class="fixed bottom-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
+    <div class="fixed bottom-16 left-0 right-0 z-40 flex justify-center pointer-events-none">
       <div class="w-full max-w-[420px] bg-white border-t border-slate-200 pointer-events-auto shadow-[0_-4px_10px_rgba(0,0,0,0.03)] p-4 pb-safe-bottom">
-        <UiAppButton full size="lg" :to="`/campaign/${route.params.id}/donasi`">
+        <UiAppButton full size="lg" @click="handleDonateClick">
           Donasi Sekarang
         </UiAppButton>
       </div>
@@ -56,14 +56,14 @@
 import { ArrowLeft, ShieldCheck } from 'lucide-vue-next'
 
 const route = useRoute()
+const { isLoggedIn } = useAuth()
+const { data: campaign } = useFetch(`/api/campaigns/${route.params.id}`)
 
-// Mock Data
-const campaign = {
-  id: route.params.id,
-  title: 'Bantu Renovasi Panti Asuhan Harapan Baru yang Hampir Rubuh',
-  currentAmount: 15500000,
-  targetAmount: 50000000,
-  image: 'https://images.unsplash.com/photo-1593113563332-e147ce827361?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+const handleDonateClick = () => {
+  if (!isLoggedIn.value) {
+    return navigateTo('/akun')
+  }
+  return navigateTo(`/campaign/${route.params.id}/donasi`)
 }
 </script>
 

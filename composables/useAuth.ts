@@ -25,6 +25,32 @@ export const useAuth = () => {
     window.location.href = '/api/auth/mock'
   }
 
+  const loginWithPassword = async (credentials: { email: string, password: string }) => {
+    try {
+      await $fetch('/api/auth/login', {
+        method: 'POST',
+        body: credentials
+      })
+      await refresh()
+      return { success: true }
+    } catch (err: any) {
+      return { success: false, message: err.data?.message || 'Login gagal' }
+    }
+  }
+
+  const register = async (data: { email: string, password: string, name: string }) => {
+    try {
+      await $fetch('/api/auth/register', {
+        method: 'POST',
+        body: data
+      })
+      await refresh()
+      return { success: true }
+    } catch (err: any) {
+      return { success: false, message: err.data?.message || 'Registrasi gagal' }
+    }
+  }
+
   const logout = async () => {
     try {
       await $fetch('/api/auth/logout', { method: 'POST' })
@@ -42,6 +68,8 @@ export const useAuth = () => {
     isAdmin,
     loginWithGoogle,
     loginAsMockAdmin,
+    loginWithPassword,
+    register,
     logout,
     refreshUser: refresh
   }

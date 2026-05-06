@@ -5,7 +5,8 @@ export const users = mysqlTable('users', {
   id: varchar('id', { length: 36 }).primaryKey(),
   email: varchar('email', { length: 255 }).notNull().unique(),
   name: varchar('name', { length: 255 }).notNull(),
-  provider: varchar('provider', { length: 50 }).notNull().default('google'),
+  password: varchar('password', { length: 255 }), // Hashed password
+  provider: varchar('provider', { length: 50 }).notNull().default('google'), // google, credentials
   role: varchar('role', { length: 50 }).notNull().default('user'), // user, admin, super_admin
   createdAt: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
 })
@@ -14,6 +15,7 @@ export const campaigns = mysqlTable('campaigns', {
   id: varchar('id', { length: 36 }).primaryKey(),
   title: varchar('title', { length: 255 }).notNull(),
   description: text('description').notNull(),
+  image: varchar('image', { length: 255 }),
   targetAmount: decimal('target_amount', { precision: 15, scale: 2 }).notNull(),
   currentAmount: decimal('current_amount', { precision: 15, scale: 2 }).notNull().default('0'),
   status: varchar('status', { length: 50 }).notNull().default('active'), // active, closed

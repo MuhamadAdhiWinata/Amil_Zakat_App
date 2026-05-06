@@ -3,7 +3,7 @@
     <UiAppHeader>
       <template #actions>
         <NuxtLink to="/akun" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden">
-          <User class="w-5 h-5 text-slate-500" />
+          <UserIcon class="w-5 h-5 text-slate-500" />
         </NuxtLink>
       </template>
     </UiAppHeader>
@@ -23,11 +23,52 @@
         </div>
       </section>
 
+      <!-- Menu Grid -->
+      <section class="px-4 mb-8 -mt-2">
+        <h2 class="text-sm font-bold text-slate-800 mb-4 px-1">Mau berbuat baik apa hari ini?</h2>
+        <div class="grid grid-cols-4 gap-y-5 gap-x-2">
+          <NuxtLink to="/donasi" class="flex flex-col items-center gap-2 group">
+            <div class="w-[50px] h-[50px] rounded-[18px] bg-sky-50 flex items-center justify-center transition-transform group-hover:scale-95">
+              <Heart class="w-6 h-6 text-sky-500 fill-sky-500/20" />
+            </div>
+            <span class="text-[11px] font-medium text-slate-700 text-center leading-tight">Donasi</span>
+          </NuxtLink>
+
+          <NuxtLink to="/donasi" class="flex flex-col items-center gap-2 group">
+            <div class="w-[50px] h-[50px] rounded-[18px] bg-emerald-50 flex items-center justify-center transition-transform group-hover:scale-95">
+              <Wallet class="w-6 h-6 text-emerald-500 fill-emerald-500/20" />
+            </div>
+            <span class="text-[11px] font-medium text-slate-700 text-center leading-tight">Zakat</span>
+          </NuxtLink>
+
+          <NuxtLink to="/admin/campaigns/create" class="flex flex-col items-center gap-2 group">
+            <div class="w-[50px] h-[50px] rounded-[18px] bg-amber-50 flex items-center justify-center transition-transform group-hover:scale-95">
+              <Megaphone class="w-6 h-6 text-amber-500 fill-amber-500/20" />
+            </div>
+            <span class="text-[11px] font-medium text-slate-700 text-center leading-tight">Galang Dana</span>
+          </NuxtLink>
+
+          <NuxtLink v-if="isAdmin" to="/admin" class="flex flex-col items-center gap-2 group">
+            <div class="w-[50px] h-[50px] rounded-[18px] bg-purple-50 flex items-center justify-center transition-transform group-hover:scale-95">
+              <ShieldCheck class="w-6 h-6 text-purple-600 fill-purple-600/20" />
+            </div>
+            <span class="text-[11px] font-medium text-slate-700 text-center leading-tight">Admin Panel</span>
+          </NuxtLink>
+          
+          <NuxtLink v-else to="/akun" class="flex flex-col items-center gap-2 group">
+            <div class="w-[50px] h-[50px] rounded-[18px] bg-indigo-50 flex items-center justify-center transition-transform group-hover:scale-95">
+              <UserCircle class="w-6 h-6 text-indigo-500 fill-indigo-500/20" />
+            </div>
+            <span class="text-[11px] font-medium text-slate-700 text-center leading-tight">Akun Saya</span>
+          </NuxtLink>
+        </div>
+      </section>
+
       <!-- Campaigns List -->
-      <section id="campaigns" class="px-4 mt-2">
+      <section id="campaigns" class="px-4">
         <div class="flex justify-between items-end mb-4">
           <h2 class="text-lg font-bold text-slate-800">Program Mendesak</h2>
-          <span class="text-xs text-primary font-medium cursor-pointer">Lihat Semua</span>
+          <NuxtLink to="/donasi" class="text-xs text-primary font-medium cursor-pointer">Lihat Semua</NuxtLink>
         </div>
 
         <div class="grid gap-4">
@@ -35,7 +76,6 @@
             <UiAppCard hover no-padding>
               <template #image>
                 <div class="absolute inset-0 bg-slate-200">
-                  <!-- Dummy Image placeholder -->
                   <img :src="item.image" class="w-full h-full object-cover" alt="Campaign Image" />
                 </div>
               </template>
@@ -53,30 +93,8 @@
 </template>
 
 <script setup lang="ts">
-import { User } from 'lucide-vue-next'
+import { User as UserIcon, Heart, Wallet, Megaphone, ShieldCheck, UserCircle } from 'lucide-vue-next'
 
-// Mock Data
-const campaigns = [
-  {
-    id: '1',
-    title: 'Bantu Renovasi Panti Asuhan Harapan Baru yang Hampir Rubuh',
-    currentAmount: 15500000,
-    targetAmount: 50000000,
-    image: 'https://images.unsplash.com/photo-1593113563332-e147ce827361?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-  },
-  {
-    id: '2',
-    title: 'Sedekah Air Bersih untuk Warga Desa Kekeringan',
-    currentAmount: 3200000,
-    targetAmount: 10000000,
-    image: 'https://images.unsplash.com/photo-1541888078952-475267bfadcd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-  },
-  {
-    id: '3',
-    title: 'Beasiswa Pendidikan Anak Yatim Berprestasi',
-    currentAmount: 4800000,
-    targetAmount: 5000000,
-    image: 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-  }
-]
+const { data: campaigns } = useFetch('/api/campaigns')
+const { isAdmin } = useAuth()
 </script>

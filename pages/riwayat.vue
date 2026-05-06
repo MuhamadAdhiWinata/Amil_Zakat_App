@@ -52,21 +52,5 @@ import { Lock, FileX } from 'lucide-vue-next'
 const { isLoggedIn, pending } = useAuth()
 const { formatRupiah, formatDate } = useFormat()
 
-// Mock History
-const history = ref([
-  {
-    id: 'D-001',
-    campaignTitle: 'Bantu Renovasi Panti Asuhan Harapan Baru',
-    amount: 500000,
-    status: 'PAID',
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: 'D-002',
-    campaignTitle: 'Sedekah Air Bersih',
-    amount: 100000,
-    status: 'PENDING',
-    createdAt: new Date(Date.now() - 86400000).toISOString() // yesterday
-  }
-])
+const { data: history } = useFetch('/api/user/donations')
 </script>

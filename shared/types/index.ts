@@ -15,6 +15,7 @@ export interface Campaign {
   id: string
   title: string
   description: string
+  image?: string
   targetAmount: number
   currentAmount: number
   status: CampaignStatus
