@@ -52,7 +52,7 @@
 
     <!-- Programs List -->
     <div class="px-4">
-      <div v-if="filteredCampaigns && filteredCampaigns.length > 0" class="grid gap-6">
+      <div v-if="filteredCampaigns && filteredCampaigns.length" class="grid gap-6">
         <NuxtLink v-for="item in filteredCampaigns" :key="item.id" :to="`/campaign/${item.id}`" class="block group">
           <UiAppCard hover no-padding class="border-none shadow-[0_10px_30px_-10px_rgba(0,0,0,0.08)] bg-white overflow-hidden rounded-[24px]">
             <template #image>

@@ -135,69 +135,85 @@ Flow:
 
 ---
 
-## 5. Database Schema (Simplified)
+## 5. Database Schema (Refined)
 
 ### users
-
-```
-id
-email
-name
-provider (google)
-role (user, admin, super_admin)
-created_at
-```
+* `id` (PK)
+* `email`
+* `name`
+* `provider` (google, credentials)
+* `role` (user, admin, super_admin)
+* `created_at`
 
 ### campaigns
+* `id` (PK)
+* `title`
+* `description`
+* `target_amount`
+* `current_amount`
+* `status` (active, closed)
+* `created_at`
 
-```
-id
-title
-description
-target_amount
-current_amount
-status
-created_at
-```
+### donations (Business Intent)
+* `id` (PK)
+* `user_id` (FK, nullable)
+* `campaign_id` (FK)
+* `donor_name`
+* `donor_email`
+* `donor_phone`
+* `amount`
+* `is_anonymous`
+* `status` (INITIATED, WAITING_PAYMENT, COMPLETED, CANCELLED)
+* `created_at`
+* `completed_at`
 
-### donations
+### payments (Settlement Transaction)
+* `id` (PK)
+* `donation_id` (FK)
+* `gateway` (e.g., "PAKASIR")
+* `gateway_method` (e.g., "qris", "bri_va")
+* `gateway_order_id` (unique reference for gateway)
+* `gateway_reference` (gateway's internal reference)
+* `amount`
+* `status` (PENDING, PAID, FAILED, EXPIRED)
+* `qr_string` (for QRIS)
+* `va_number` (for VA)
+* `expired_at`
+* `paid_at`
+* `raw_response` (JSON)
+* `created_at`
+* `updated_at`
 
-```
-id
-user_id (nullable)
-guest_name
-guest_email
-amount
-is_anonymous
-campaign_id
-status (PENDING, PAID, FAILED, EXPIRED)
-invoice_id
-payment_reference
-created_at
-paid_at
-```
-
-### payment_logs
-
-```
-id
-donation_id
-payload (json)
-created_at
-```
+### payment_logs (Audit Trail)
+* `id` (PK)
+* `payment_id` (FK)
+* `type` (WEBHOOK, API_REQUEST, API_RESPONSE, STATUS_CHECK)
+* `direction` (IN, OUT)
+* `payload` (JSON)
+* `created_at`
 
 ---
 
 ## 6. Payment Integration (Pakasir)
 
-### Flow
+### Architecture
+* **Event-Driven**: Decouple payment settlement from business logic.
+* **Idempotency**: Handle duplicate webhooks gracefully.
+* **Verification**: Never update status based solely on webhook payload; always verify via `transactiondetail` API.
 
-1. Create donation
-2. Generate invoice_id
-3. Call API
-4. User bayar
-5. Webhook
-6. Update status
+### Transaction Lifecycle
+1. **Initiate**: User selects nominal and campaign -> Create `donation` (status: INITIATED).
+2. **Checkout**: User selects payment method -> Create `payment` (status: PENDING), update `donation` (status: WAITING_PAYMENT).
+3. **Gateway Call**: Call Pakasir API -> Store gateway references and QR/VA data.
+4. **Settlement**: 
+   - Webhook received -> Log it.
+   - Verify with Pakasir `transactiondetail` API.
+   - If success: Update `payment` (PAID) and `donation` (COMPLETED).
+   - Trigger `payment.paid` event.
+
+### Supported Methods
+* QRIS (`qris`)
+* Virtual Accounts: BRI (`bri_va`), BNI (`bni_va`), CIMB (`cimb_niaga_va`), Permata (`permata_va`), Maybank (`maybank_va`).
 
 ---
 
@@ -578,11 +594,14 @@ docker-compose up --build
 ---
 
 ## 11. Security
-
-* HTTP-only cookies
-* Validate webhook
-* Logging
-* Backup DB
+* **HTTP-only cookies**: Proteksi session dari XSS.
+* **Webhook Validation**: 
+  - Wajib validasi IP source (jika memungkinkan).
+  - Wajib verifikasi status transaksi via API `transactiondetail` Pakasir sebelum update database.
+* **Idempotency**: Pengecekan status transaksi sebelum memproses webhook untuk mencegah double settlement.
+* **Audit Trail**: Logging setiap aktivitas pembayaran (request, response, webhook) di tabel `payment_logs`.
+* **Database Security**: Backup berkala dan penggunaan user dengan privilese terbatas.
+* **API Security**: Semua API key dan Merchant Slug Pakasir harus berada di server-side (.env).
 
 ---
 

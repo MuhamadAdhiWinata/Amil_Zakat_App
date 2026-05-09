@@ -130,7 +130,7 @@ const handleDonate = async () => {
     })
     
     toast.success('Donasi berhasil dibuat', 'Menuju halaman pembayaran...')
-    router.push(`/donasi/simulasi-pembayaran?id=${res.donationId}`)
+    router.push(`/donasi/${res.donationId}/pembayaran`)
   } catch (err: any) {
     toast.error('Gagal membuat donasi', err.data?.message || 'Terjadi kesalahan sistem')
   } finally {

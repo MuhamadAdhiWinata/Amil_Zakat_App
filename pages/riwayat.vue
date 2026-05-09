@@ -28,12 +28,12 @@
             <span 
               class="px-2 py-0.5 text-[10px] font-bold rounded uppercase tracking-wider"
               :class="{
-                'bg-emerald-50 text-success border border-emerald-100': item.status === 'PAID',
-                'bg-amber-50 text-warning border border-amber-100': item.status === 'PENDING',
-                'bg-red-50 text-danger border border-red-100': item.status === 'FAILED' || item.status === 'EXPIRED',
+                'bg-emerald-50 text-success border border-emerald-100': item.status === 'COMPLETED',
+                'bg-amber-50 text-warning border border-amber-100': ['WAITING_PAYMENT', 'INITIATED'].includes(item.status),
+                'bg-red-50 text-danger border border-red-100': ['CANCELLED'].includes(item.status),
               }"
             >
-              {{ item.status }}
+              {{ item.status === 'COMPLETED' ? 'BERHASIL' : (['WAITING_PAYMENT', 'INITIATED'].includes(item.status) ? 'PENDING' : item.status) }}
             </span>
           </div>
           <div class="p-4">

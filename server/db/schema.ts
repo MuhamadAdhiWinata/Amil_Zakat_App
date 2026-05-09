@@ -34,21 +34,40 @@ export const campaigns = mysqlTable('campaigns', {
 export const donations = mysqlTable('donations', {
   id: varchar('id', { length: 36 }).primaryKey(),
   userId: varchar('user_id', { length: 36 }),
-  guestName: varchar('guest_name', { length: 255 }),
-  guestEmail: varchar('guest_email', { length: 255 }),
+  campaignId: varchar('campaign_id', { length: 36 }).notNull(),
+  donaturName: varchar('donatur_name', { length: 255 }),
+  donaturEmail: varchar('donatur_email', { length: 255 }),
+  donaturPhone: varchar('donatur_phone', { length: 20 }),
   amount: decimal('amount', { precision: 15, scale: 2 }).notNull(),
   isAnonymous: boolean('is_anonymous').notNull().default(false),
-  campaignId: varchar('campaign_id', { length: 36 }).notNull(),
-  status: varchar('status', { length: 50 }).notNull().default('PENDING'), // PENDING, PAID, FAILED, EXPIRED
-  invoiceId: varchar('invoice_id', { length: 100 }),
-  paymentReference: varchar('payment_reference', { length: 255 }),
+  status: varchar('status', { length: 50 }).notNull().default('INITIATED'), // INITIATED, WAITING_PAYMENT, COMPLETED, CANCELLED
   createdAt: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
+  completedAt: timestamp('completed_at'),
+})
+
+export const payments = mysqlTable('payments', {
+  id: varchar('id', { length: 36 }).primaryKey(),
+  donationId: varchar('donation_id', { length: 36 }).notNull(),
+  gateway: varchar('gateway', { length: 50 }).notNull().default('PAKASIR'),
+  gatewayMethod: varchar('gateway_method', { length: 50 }), // qris, bri_va, etc
+  gatewayOrderId: varchar('gateway_order_id', { length: 100 }).unique(),
+  gatewayReference: varchar('gateway_reference', { length: 255 }),
+  amount: decimal('amount', { precision: 15, scale: 2 }).notNull(),
+  status: varchar('status', { length: 50 }).notNull().default('PENDING'), // PENDING, PAID, FAILED, EXPIRED
+  qrString: text('qr_string'),
+  vaNumber: varchar('va_number', { length: 50 }),
+  expiredAt: timestamp('expired_at'),
   paidAt: timestamp('paid_at'),
+  rawResponse: json('raw_response'),
+  createdAt: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
+  updatedAt: timestamp('updated_at').onUpdateNow(),
 })
 
 export const paymentLogs = mysqlTable('payment_logs', {
   id: varchar('id', { length: 36 }).primaryKey(),
-  donationId: varchar('donation_id', { length: 36 }).notNull(),
+  paymentId: varchar('payment_id', { length: 36 }),
+  type: varchar('type', { length: 50 }).notNull(), // WEBHOOK, API_REQUEST, API_RESPONSE, STATUS_CHECK
+  direction: varchar('direction', { length: 10 }).notNull(), // IN, OUT
   payload: json('payload').notNull(),
   createdAt: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
 })
