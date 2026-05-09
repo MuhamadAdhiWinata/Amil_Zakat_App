@@ -23,5 +23,4 @@ logs
 .env.*
 !.env.example
 
-client_secret_261680221028-5jkn46p7gsin6n92mibnsq2k72n6gmuv.apps.googleusercontent.com.json
-
+client_secret_*.json
