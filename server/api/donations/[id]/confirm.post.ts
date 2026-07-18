@@ -1,54 +1,39 @@
-import { eq } from 'drizzle-orm'
-import { getDb, schema } from '~~/server/db'
-
-const { donations, campaigns } = schema
+import { donationRepository } from '../../../repositories/donation.repository'
+import { getDb } from '../../../db'
+import { campaigns } from '../../../db/schema'
+import { eq, sql } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
   if (!id) {
-    throw createError({ statusCode: 400, message: 'ID donasi tidak valid' })
+    throw createError({ statusCode: 400, statusMessage: 'ID donasi tidak valid' })
   }
 
   const body = await readBody(event)
-  const status = body.status || 'PAID'
+  const status = body.status || 'COMPLETED'
 
-  if (!['PAID', 'FAILED', 'EXPIRED'].includes(status)) {
-    throw createError({ statusCode: 400, message: 'Status tidak valid' })
+  if (!['COMPLETED', 'CANCELLED'].includes(status)) {
+    throw createError({ statusCode: 400, statusMessage: 'Status tidak valid' })
   }
 
-  const db = getDb()
-
-  // Get the donation
-  const existingDonations = await db.select().from(donations).where(eq(donations.id, id)).limit(1)
-  const donation = existingDonations[0]
-
+  const donation = await donationRepository.findById(id)
   if (!donation) {
-    throw createError({ statusCode: 404, message: 'Donasi tidak ditemukan' })
+    throw createError({ statusCode: 404, statusMessage: 'Donasi tidak ditemukan' })
   }
 
-  if (donation.status !== 'PENDING') {
-    throw createError({ statusCode: 400, message: 'Donasi sudah diproses sebelumnya' })
+  if (donation.status !== 'INITIATED' && donation.status !== 'WAITING_PAYMENT') {
+    throw createError({ statusCode: 400, statusMessage: 'Donasi sudah diproses sebelumnya' })
   }
 
-  // Update donation status
-  await db.update(donations)
-    .set({ 
-      status,
-      paidAt: status === 'PAID' ? new Date() : null
-    })
-    .where(eq(donations.id, id))
-
-  // If PAID, update the campaign currentAmount
-  if (status === 'PAID') {
-    const existingCampaigns = await db.select().from(campaigns).where(eq(campaigns.id, donation.campaignId)).limit(1)
-    const campaign = existingCampaigns[0]
-
-    if (campaign) {
-      const newAmount = Number(campaign.currentAmount) + Number(donation.amount)
-      await db.update(campaigns)
-        .set({ currentAmount: newAmount.toString() })
-        .where(eq(campaigns.id, campaign.id))
-    }
+  if (status === 'COMPLETED') {
+    const paidAt = new Date()
+    await donationRepository.updateStatus(id, 'COMPLETED', paidAt)
+    const db = getDb()
+    await db.update(campaigns)
+      .set({ currentAmount: sql`${campaigns.currentAmount} + ${donation.amount}` })
+      .where(eq(campaigns.id, donation.campaignId))
+  } else {
+    await donationRepository.updateStatus(id, 'CANCELLED')
   }
 
   return { success: true, status }

@@ -7,5 +7,5 @@ export default defineEventHandler(async (event) => {
   const donation = await donationRepository.findById(id)
   if (!donation) throw createError({ statusCode: 404, message: 'Donation not found' })
 
-  return donation
+  return { ...donation, amount: Number(donation.amount) }
 })

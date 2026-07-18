@@ -54,21 +54,19 @@ import {
 } from 'lucide-vue-next'
 
 const { data: categories, pending, refresh } = useFetch<any[]>('/api/categories')
-const { showToast } = useToast()
+const toast = useToast()
 
 const iconMap: Record<string, any> = {
   LayoutGrid, Flame, Landmark, GraduationCap, Stethoscope, Wallet
 }
 
 const deleteCategory = async (id: string) => {
-  if (!confirm('Yakin ingin menghapus kategori ini?')) return
-  
   try {
     await $fetch(`/api/admin/categories/${id}`, { method: 'DELETE' })
-    showToast('Kategori berhasil dihapus', 'success')
+    toast.success('Kategori berhasil dihapus')
     refresh()
   } catch (e) {
-    showToast('Gagal menghapus kategori', 'error')
+    toast.error('Gagal menghapus kategori')
   }
 }
 

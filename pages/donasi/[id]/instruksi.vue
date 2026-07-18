@@ -60,12 +60,13 @@
 
 <script setup lang="ts">
 import { Home, Clock, QrCode } from 'lucide-vue-next'
+import type { Payment } from '~/shared/types/donation'
 
 const route = useRoute()
 const router = useRouter()
 const toast = useToast()
 
-const payment = ref<any>(null)
+const payment = ref<Payment | null>(null)
 const loading = ref(true)
 const checking = ref(false)
 

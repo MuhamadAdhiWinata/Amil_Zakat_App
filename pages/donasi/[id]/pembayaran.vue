@@ -76,13 +76,13 @@
 
 <script setup lang="ts">
 import { ArrowLeft } from 'lucide-vue-next'
-import type { PaymentMethod } from '~/shared/types/donation'
+import type { PaymentMethod, Donation } from '~/shared/types/donation'
 
 const route = useRoute()
 const router = useRouter()
 const toast = useToast()
 
-const donation = ref<any>(null)
+const donation = ref<Donation | null>(null)
 const loading = ref(true)
 const selectedMethod = ref<PaymentMethod | null>(null)
 const isSubmitting = ref(false)

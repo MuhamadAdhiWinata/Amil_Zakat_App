@@ -50,7 +50,7 @@ definePageMeta({
 const router = useRouter()
 const toast = useToast()
 
-const { data: categories } = useFetch<any[]>('/api/categories')
+const { data: categories } = useFetch<any[]>('/api/categories') // TODO: add proper Category type
 
 const form = ref({
   title: '',

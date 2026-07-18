@@ -53,11 +53,12 @@
 
 <script setup lang="ts">
 import { CheckCircle2 } from 'lucide-vue-next'
+import type { Donation } from '~/shared/types/donation'
 
 const route = useRoute()
 const toast = useToast()
 
-const donation = ref<any>(null)
+const donation = ref<Donation | null>(null)
 const loading = ref(true)
 
 const formatNumber = (num: number) => {

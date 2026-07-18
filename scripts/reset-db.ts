@@ -7,6 +7,7 @@ async function dropAll() {
   console.log('Dropping all tables...')
   await db.execute(sql`SET FOREIGN_KEY_CHECKS = 0`)
   await db.execute(sql`DROP TABLE IF EXISTS payment_logs`)
+  await db.execute(sql`DROP TABLE IF EXISTS payments`)
   await db.execute(sql`DROP TABLE IF EXISTS donations`)
   await db.execute(sql`DROP TABLE IF EXISTS campaigns`)
   await db.execute(sql`DROP TABLE IF EXISTS categories`)

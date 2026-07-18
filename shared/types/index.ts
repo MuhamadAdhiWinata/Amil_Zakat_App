@@ -1,5 +1,4 @@
 export type UserRole = 'super_admin' | 'admin' | 'user'
-export type DonationStatus = 'PENDING' | 'PAID' | 'FAILED' | 'EXPIRED'
 export type CampaignStatus = 'active' | 'closed'
 
 export interface User {
@@ -20,19 +19,4 @@ export interface Campaign {
   currentAmount: number
   status: CampaignStatus
   createdAt: string
-}
-
-export interface Donation {
-  id: string
-  userId?: string
-  guestName?: string
-  guestEmail?: string
-  amount: number
-  isAnonymous: boolean
-  campaignId: string
-  status: DonationStatus
-  invoiceId?: string
-  paymentReference?: string
-  createdAt: string
-  paidAt?: string
 }

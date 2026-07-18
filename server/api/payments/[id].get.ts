@@ -9,20 +9,21 @@ export default defineEventHandler(async (event) => {
   const payment = await paymentRepository.findById(id)
   if (!payment) throw createError({ statusCode: 404, message: 'Payment not found' })
 
+  const mapPayment = (p: typeof payment) => ({ ...p, amount: Number(p.amount) })
+
   // Auto-sync with Pakasir if still PENDING
   if (payment.status === 'PENDING' && payment.gatewayOrderId) {
     try {
       const detail = await pakasirService.getTransactionDetail(payment.gatewayOrderId, Number(payment.amount))
       if (detail.transaction && detail.transaction.status === 'completed') {
-        // Trigger settlement manually if Pakasir says it's completed
         await paymentService.settlePayment(payment.id, detail.transaction.completed_at)
-        // Re-fetch the updated payment
-        return await paymentRepository.findById(id)
+        const updated = await paymentRepository.findById(id)
+        return updated ? mapPayment(updated) : mapPayment(payment)
       }
     } catch (err) {
       console.error('[Payment Sync Error]', err)
     }
   }
 
-  return payment
+  return mapPayment(payment)
 })

@@ -18,9 +18,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 403, message: 'Forbidden' })
   }
 
-  // Fetch all donations with basic info
-  // For simplicity, we just fetch donations and we can map them
   const allDonations = await db.select().from(donations).orderBy(desc(donations.createdAt))
 
-  return allDonations
+  return allDonations.map(d => ({ ...d, amount: Number(d.amount) }))
 })

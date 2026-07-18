@@ -49,11 +49,11 @@ const iconOptions = {
 }
 
 const loading = ref(false)
-const { showToast } = useToast()
+const toast = useToast()
 const router = useRouter()
 
 const save = async () => {
-  if (!form.value.name) return showToast('Nama harus diisi', 'error')
+  if (!form.value.name) return toast.error('Nama harus diisi')
   
   loading.value = true
   try {
@@ -61,10 +61,10 @@ const save = async () => {
       method: 'POST',
       body: form.value
     })
-    showToast('Kategori berhasil ditambahkan', 'success')
+    toast.success('Kategori berhasil ditambahkan')
     router.push('/admin/categories')
   } catch (e) {
-    showToast('Gagal menyimpan kategori', 'error')
+    toast.error('Gagal menyimpan kategori')
   } finally {
     loading.value = false
   }

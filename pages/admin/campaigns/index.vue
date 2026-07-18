@@ -38,13 +38,14 @@
 
 <script setup lang="ts">
 import { Plus, Edit, Trash2 } from 'lucide-vue-next'
+import type { Campaign } from '~/shared/types'
 
 definePageMeta({
   layout: 'admin',
   middleware: ['admin']
 })
 
-const { data: campaigns, refresh } = useFetch<any[]>('/api/campaigns')
+const { data: campaigns, refresh } = useFetch<Campaign[]>('/api/campaigns')
 const toast = useToast()
 
 const handleDelete = async (id: string) => {
