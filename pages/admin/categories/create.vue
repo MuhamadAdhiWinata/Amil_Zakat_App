@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="admin">
+  <div>
     <UiAppHeader title="Tambah Kategori" show-back @back="$router.back()" />
     
     <div class="p-4">
@@ -29,7 +29,7 @@
         </UiAppButton>
       </div>
     </div>
-  </NuxtLayout>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -71,6 +71,7 @@ const save = async () => {
 }
 
 definePageMeta({
-  middleware: 'admin'
+  layout: 'admin',
+  middleware: ['admin']
 })
 </script>

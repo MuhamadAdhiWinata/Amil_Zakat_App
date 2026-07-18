@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="admin">
+  <div>
     <UiAppHeader title="Kelola Kategori" />
     
     <div class="p-4">
@@ -44,7 +44,7 @@
         </div>
       </div>
     </div>
-  </NuxtLayout>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -71,6 +71,7 @@ const deleteCategory = async (id: string) => {
 }
 
 definePageMeta({
-  middleware: 'admin'
+  layout: 'admin',
+  middleware: ['admin']
 })
 </script>
