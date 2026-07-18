@@ -117,12 +117,12 @@
           </button>
         </p>
 
-        <div v-if="isDev" class="mt-8 pt-8 border-t border-dashed border-slate-200">
+        <!-- <div v-if="isDev" class="mt-8 pt-8 border-t border-dashed border-slate-200">
           <p class="text-xs text-slate-400 mb-4 text-center">Mode Development</p>
           <UiAppButton @click="loginAsMockAdmin" variant="outline" full size="sm">
             Mock Login (Admin)
           </UiAppButton>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

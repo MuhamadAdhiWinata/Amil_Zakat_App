@@ -3,13 +3,12 @@
     <div class="flex items-center justify-between px-4 h-14">
       <div class="flex items-center space-x-2">
         <slot name="logo">
-          <div class="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center font-bold text-lg">
-            A
-          </div>
-          <span class="font-bold text-lg text-slate-800 tracking-tight">{{ title }}</span>
+          <img src="~/assets/images/image.png" class="w-8 h-8 rounded-lg object-cover" alt="Baitulmall" />
+          <span class="font-bold text-sm sm:text-base text-slate-800 tracking-tight truncate">{{ title }}</span>
         </slot>
       </div>
       <div class="flex items-center space-x-3">
+        <UiPwaInstallButton />
         <slot name="actions" />
       </div>
     </div>
@@ -20,7 +19,7 @@
 withDefaults(defineProps<{
   title?: string
 }>(), {
-  title: 'Amil Zakat'
+  title: 'Baitulmall Bangun Rakyat Sejahtera'
 })
 </script>
 

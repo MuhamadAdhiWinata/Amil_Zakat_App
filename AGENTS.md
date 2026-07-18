@@ -1,4 +1,4 @@
-# Amil Zakat App — Agent Guide
+# Baitulmall Bangun Rakyat Sejahtera — Agent Guide
 
 ## Quick start
 | Command | Purpose |

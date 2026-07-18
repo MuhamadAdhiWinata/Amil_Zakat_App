@@ -20,7 +20,7 @@
         <div class="flex items-center gap-3 mt-6 pt-4 border-t border-slate-100">
           <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-primary font-bold">AZ</div>
           <div>
-            <div class="text-sm font-bold text-slate-800">Yayasan Amil Zakat</div>
+            <div class="text-sm font-bold text-slate-800">Baitulmall Bangun Rakyat Sejahtera</div>
             <div class="text-xs text-slate-500 flex items-center gap-1">
               <ShieldCheck class="w-3.5 h-3.5 text-primary" /> Terverifikasi
             </div>
