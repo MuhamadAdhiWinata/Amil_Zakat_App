@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-slate-50 pb-24">
     <UiAppHeader title="Pilih Pembayaran">
       <template #logo>
-        <button @click="$router.back()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100">
+        <button @click="router.back()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100">
           <ArrowLeft class="w-5 h-5 text-slate-700" />
         </button>
       </template>
@@ -87,7 +87,7 @@ const loading = ref(true)
 const selectedMethod = ref<PaymentMethod | null>(null)
 const isSubmitting = ref(false)
 
-const paymentMethods = [
+const paymentMethods: { id: PaymentMethod; name: string; description: string; icon: string }[] = [
   { id: 'qris', name: 'QRIS', description: 'Gopay, OVO, Dana, LinkAja', icon: 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_QRIS.svg' },
   { id: 'bri', name: 'BRI Virtual Account', description: 'Transfer Bank BRI', icon: 'https://upload.wikimedia.org/wikipedia/commons/2/2e/BRI_Logo.svg' },
   { id: 'bni', name: 'BNI Virtual Account', description: 'Transfer Bank BNI', icon: 'https://upload.wikimedia.org/wikipedia/commons/0/03/BNI_logo.svg' },
@@ -101,7 +101,7 @@ const formatNumber = (num: number) => {
 onMounted(async () => {
   try {
     const res = await $fetch(`/api/donations/${route.params.id}`)
-    donation.value = res
+    donation.value = res as any
   } catch (err) {
     toast.error('Gagal memuat data donasi')
   } finally {

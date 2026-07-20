@@ -1,6 +1,6 @@
 <template>
   <div>
-    <UiAppHeader title="Tambah Kategori" show-back @back="$router.back()" />
+    <UiAppHeader title="Tambah Kategori" show-back @back="router.back()" />
     
     <div class="p-4">
       <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">

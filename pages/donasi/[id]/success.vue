@@ -68,7 +68,7 @@ const formatNumber = (num: number) => {
 onMounted(async () => {
   try {
     const res = await $fetch(`/api/donations/${route.params.id}`)
-    donation.value = res
+    donation.value = res as any
   } catch (err) {
     toast.error('Gagal memuat data donasi')
   } finally {

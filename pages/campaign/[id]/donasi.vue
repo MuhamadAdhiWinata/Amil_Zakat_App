@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-slate-50 pb-24">
     <UiAppHeader title="Masukkan Nominal">
       <template #logo>
-        <button @click="$router.back()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100">
+        <button @click="router.back()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100">
           <ArrowLeft class="w-5 h-5 text-slate-700" />
         </button>
       </template>
