@@ -14,9 +14,17 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy only the necessary files from the build stage
+# Install production dependencies (mysql2, drizzle-orm, bcryptjs)
+COPY package*.json ./
+RUN npm install --omit=dev
+
+# Copy built app
 COPY --from=build /app/.output ./.output
-COPY --from=build /app/package*.json ./
+
+# Copy startup files
+COPY scripts/startup.mjs ./scripts/startup.mjs
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Environment variables
 ENV PORT=3000
@@ -24,5 +32,5 @@ ENV NODE_ENV=production
 
 EXPOSE 3000
 
-# Start the application
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["node", ".output/server/index.mjs"]
