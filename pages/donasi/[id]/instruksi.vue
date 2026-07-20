@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-slate-50 pb-24">
     <UiAppHeader title="Instruksi Pembayaran">
       <template #logo>
-        <button @click="$router.push('/')" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100">
+        <button @click="router.push('/')" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100">
           <Home class="w-5 h-5 text-slate-700" />
         </button>
       </template>
@@ -48,18 +48,22 @@
           <span class="text-lg font-bold text-slate-800">Rp {{ formatNumber(Number(payment.amount)) }}</span>
         </div>
 
-        <!-- Refresh / Check Status -->
-        <div class="pt-4">
-          <UiAppButton full @click="checkStatus" :loading="checking">Saya Sudah Bayar</UiAppButton>
-          <p class="text-center text-xs text-slate-400 mt-4 px-8">Status akan terupdate otomatis dalam beberapa detik setelah pembayaran berhasil.</p>
+        <!-- ID Pembayaran -->
+        <div v-if="payment.gatewayOrderId" class="bg-white rounded-2xl p-4 shadow-sm">
+          <div class="flex justify-between items-center">
+            <span class="text-xs text-slate-400">ID Pembayaran</span>
+            <span class="font-mono text-xs text-slate-600 font-bold">{{ payment.gatewayOrderId }}</span>
+          </div>
         </div>
+
+        <p class="text-center text-xs text-slate-400 pt-4 px-8">Status akan terupdate otomatis setelah pembayaran berhasil.</p>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Home, Clock, QrCode } from 'lucide-vue-next'
+import { Home, Clock } from 'lucide-vue-next'
 import type { Payment } from '~/shared/types/donation'
 
 const route = useRoute()
@@ -68,7 +72,6 @@ const toast = useToast()
 
 const payment = ref<Payment | null>(null)
 const loading = ref(true)
-const checking = ref(false)
 
 const formatNumber = (num: number) => {
   return new Intl.NumberFormat('id-ID').format(num)
@@ -76,12 +79,10 @@ const formatNumber = (num: number) => {
 
 const fetchPayment = async () => {
   try {
-    const paymentId = route.query.paymentId
+    const paymentId = route.query.paymentId as string | undefined
     if (!paymentId) throw new Error('Missing paymentId')
     
-    // We need a specific endpoint for payment details or just use general fetch
-    // For now assume we have /api/payments/[id]
-    const res = await $fetch(`/api/payments/${paymentId}`)
+    const res = await $fetch<Payment>(`/api/payments/${paymentId}`)
     payment.value = res
     
     if (res.status === 'PAID') {
@@ -102,20 +103,12 @@ onMounted(() => {
 })
 
 const copyVA = () => {
+  if (!payment.value?.vaNumber) return
   navigator.clipboard.writeText(payment.value.vaNumber)
   toast.success('Nomor VA berhasil disalin')
 }
 
 const downloadQR = () => {
   toast.info('Fitur unduh QR sedang disiapkan')
-}
-
-const checkStatus = async () => {
-  checking.value = true
-  await fetchPayment()
-  if (payment.value?.status !== 'PAID') {
-    toast.info('Pembayaran belum diterima', 'Mohon tunggu sebentar atau coba lagi.')
-  }
-  checking.value = false
 }
 </script>

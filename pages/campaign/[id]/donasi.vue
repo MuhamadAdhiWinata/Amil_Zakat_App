@@ -123,8 +123,8 @@ const handleDonate = async () => {
       body: {
         amount,
         campaignId: route.params.id,
-        guestName: guestName.value,
-        guestEmail: guestEmail.value,
+        donaturName: isLoggedIn.value ? user?.name : guestName.value,
+        donaturEmail: isLoggedIn.value ? user?.email : guestEmail.value,
         isAnonymous: isAnonymous.value
       }
     })

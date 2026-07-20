@@ -2,7 +2,7 @@
   <div class="pb-24 min-h-screen bg-slate-50">
     <UiAppHeader title="Detail Donasi">
       <template #logo>
-        <button @click="$router.back()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100">
+        <button @click="router.back()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100">
           <ArrowLeft class="w-5 h-5 text-slate-700" />
         </button>
       </template>
@@ -12,7 +12,7 @@
       <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
     </div>
 
-    <div v-else-if="donation" class="p-4 space-y-4">
+    <div v-else-if="donation" class="p-4 space-y-3">
       <!-- Status & ID -->
       <UiAppCard class="space-y-4">
         <div class="flex items-center justify-between">
@@ -59,8 +59,9 @@
       <UiAppCard>
         <h3 class="font-bold text-slate-800 mb-3 text-sm">Informasi Donatur</h3>
         <div class="space-y-2 text-sm">
-          <div v-if="donation.isAnonymous" class="text-slate-500 italic">
-            Donasi Anonim
+          <div v-if="donation.isAnonymous">
+            <div class="font-bold text-slate-800">Hamba Allah</div>
+            <p class="text-xs text-slate-400 mt-1">Donasi sebagai Hamba Allah</p>
           </div>
           <template v-else>
             <div class="flex justify-between">
@@ -121,6 +122,7 @@
 import { ArrowLeft } from 'lucide-vue-next'
 
 const route = useRoute()
+const router = useRouter()
 const toast = useToast()
 const { formatRupiah, formatDate } = useFormat()
 
@@ -175,6 +177,10 @@ const paymentMethodLabel = (method: string) => {
     cimb_niaga_va: 'CIMB Niaga Virtual Account',
     permata_va: 'Permata Virtual Account',
     maybank_va: 'Maybank Virtual Account',
+    sampoerna_va: 'Sampoerna Virtual Account',
+    bnc_va: 'BNC Virtual Account',
+    atm_bersama_va: 'ATM Bersama Virtual Account',
+    artha_graha_va: 'Artha Graha Virtual Account',
   }
   return labels[method] || method
 }

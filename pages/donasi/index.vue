@@ -1,7 +1,8 @@
 <template>
   <div class="min-h-screen bg-slate-50 pb-24">
-    <!-- Premium Header -->
-    <div class="glass sticky top-0 z-40 px-4 py-4 border-b border-white/20 shadow-sm">
+    <UiAppHeader title="Donasi" />
+
+    <div class="px-4 pt-3 pb-1">
       <div class="flex items-center gap-3">
         <div class="relative flex-1 group">
           <Search class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-primary transition-colors" />

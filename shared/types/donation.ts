@@ -34,8 +34,12 @@ export interface Payment {
 
 export type PaymentMethod = 
   | 'qris'
-  | 'bri'
-  | 'bni'
-  | 'cimb'
-  | 'permata'
-  | 'maybank';
+  | 'bri_va'
+  | 'bni_va'
+  | 'cimb_niaga_va'
+  | 'sampoerna_va'
+  | 'bnc_va'
+  | 'maybank_va'
+  | 'permata_va'
+  | 'atm_bersama_va'
+  | 'artha_graha_va';

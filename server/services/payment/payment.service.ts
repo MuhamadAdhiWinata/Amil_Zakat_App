@@ -19,8 +19,8 @@ export class PaymentService {
     isAnonymous: boolean
   }) {
     const donationId = crypto.randomUUID()
-    const donaturName = data.donaturName?.trim() || (data.isAnonymous ? 'Hamba Allah' : 'Anonim')
-    const donaturEmail = data.donaturEmail?.trim() || 'guest@example.com'
+    const donaturName = data.donaturName?.trim() || 'Anonim'
+    const donaturEmail = data.donaturEmail?.trim() || ''
 
     const donation = await donationRepository.create({
       id: donationId,

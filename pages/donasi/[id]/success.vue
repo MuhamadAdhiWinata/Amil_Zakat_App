@@ -28,7 +28,7 @@
             </div>
             <div class="flex justify-between text-xs">
               <span class="text-slate-400 font-medium">ID Transaksi</span>
-              <span class="font-mono text-slate-500">{{ donation.id.split('-')[0].toUpperCase() }}</span>
+              <span class="font-mono text-slate-500">{{ donation.gatewayOrderId || donation.id.split('-')[0].toUpperCase() }}</span>
             </div>
             <div class="pt-2 border-t border-slate-200/50 flex justify-between items-center">
               <span class="text-xs text-slate-400">Status</span>

@@ -21,9 +21,9 @@
         <UiAppButton to="/" full variant="outline">Mulai Berdonasi</UiAppButton>
       </div>
 
-      <div v-else class="space-y-3">
-        <NuxtLink v-for="item in history" :key="item.id" :to="`/riwayat/${item.id}`">
-          <UiAppCard no-padding class="flex flex-col hover:shadow-md transition-shadow cursor-pointer active:scale-[0.98]">
+      <div v-else class="space-y-4">
+        <NuxtLink v-for="item in history" :key="item.id" :to="`/riwayat-detail/${item.id}`">
+          <UiAppCard no-padding class="flex flex-col hover:shadow-md transition-shadow cursor-pointer active:scale-[0.98] mb-3">
             <div class="p-4 border-b border-slate-100 flex justify-between items-center">
               <div class="text-xs text-slate-500">{{ formatDate(item.createdAt) }}</div>
               <span 

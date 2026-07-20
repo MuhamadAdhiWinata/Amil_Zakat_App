@@ -7,8 +7,8 @@
         <div v-for="item in donations" :key="item.id" class="bg-white rounded-xl shadow-sm border border-slate-100 p-4">
           <div class="flex justify-between items-start mb-2">
             <div>
-              <div class="font-bold text-slate-800 text-sm">{{ item.donaturName || 'Anonim' }}</div>
-              <div class="text-xs text-slate-500">{{ item.donaturEmail || 'Tanpa Email' }}</div>
+              <div class="font-bold text-slate-800 text-sm">{{ item.isAnonymous ? 'Hamba Allah' : (item.donaturName || 'Anonim') }}</div>
+              <div class="text-xs text-slate-500">{{ item.isAnonymous ? '—' : (item.donaturEmail || 'Tanpa Email') }}</div>
             </div>
             <div class="text-xs font-bold px-2 py-1 rounded-full" :class="statusColor(item.status)">
               {{ item.status }}

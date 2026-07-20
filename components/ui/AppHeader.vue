@@ -8,7 +8,7 @@
         </slot>
       </div>
       <div class="flex items-center space-x-3">
-        <UiPwaInstallButton />
+        <UiPwaInstallButton v-if="isAkunPage" />
         <slot name="actions" />
       </div>
     </div>
@@ -16,6 +16,9 @@
 </template>
 
 <script setup lang="ts">
+const route = useRoute()
+const isAkunPage = computed(() => route.path === '/akun')
+
 withDefaults(defineProps<{
   title?: string
 }>(), {

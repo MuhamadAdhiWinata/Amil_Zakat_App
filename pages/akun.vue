@@ -44,6 +44,7 @@
             </button>
           </div>
         </UiAppCard>
+
       </div>
 
       <div v-else class="max-w-md mx-auto">
