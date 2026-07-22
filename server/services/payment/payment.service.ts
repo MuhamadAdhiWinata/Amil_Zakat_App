@@ -74,7 +74,9 @@ export class PaymentService {
         const db = getDb() 
         await db.update(payments)
           .set({ 
-            gatewayReference: paymentData.payment_number, // Pakasir doesn't seem to have separate reference in docs
+            gatewayReference: paymentData.payment_number,
+            fee: paymentData.fee?.toString(),
+            totalPayment: paymentData.total_payment?.toString(),
             qrString: method === 'qris' ? paymentData.payment_number : null,
             vaNumber: method !== 'qris' ? paymentData.payment_number : null,
             expiredAt: paymentData.expired_at ? new Date(paymentData.expired_at) : null,

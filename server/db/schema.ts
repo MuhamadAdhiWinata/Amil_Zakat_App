@@ -53,6 +53,8 @@ export const payments = mysqlTable('payments', {
   gatewayOrderId: varchar('gateway_order_id', { length: 100 }).unique(),
   gatewayReference: varchar('gateway_reference', { length: 255 }),
   amount: decimal('amount', { precision: 15, scale: 2 }).notNull(),
+  fee: decimal('fee', { precision: 15, scale: 2 }),
+  totalPayment: decimal('total_payment', { precision: 15, scale: 2 }),
   status: varchar('status', { length: 50 }).notNull().default('PENDING'), // PENDING, PAID, FAILED, EXPIRED
   qrString: text('qr_string'),
   vaNumber: varchar('va_number', { length: 50 }),

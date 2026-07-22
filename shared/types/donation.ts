@@ -23,6 +23,8 @@ export interface Payment {
   gatewayOrderId?: string;
   gatewayReference?: string;
   amount: number;
+  fee?: number;
+  totalPayment?: number;
   status: PaymentStatus;
   qrString?: string;
   vaNumber?: string;

@@ -43,6 +43,7 @@
               <div class="flex-1">
                 <div class="text-sm font-bold text-slate-800">{{ method.name }}</div>
                 <div class="text-xs text-slate-500">{{ method.description }}</div>
+                <div class="text-xs text-amber-600 font-medium mt-0.5">{{ method.feeLabel }}</div>
               </div>
               <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center" :class="selectedMethod === method.id ? 'border-primary bg-primary' : 'border-slate-200'">
                 <div v-if="selectedMethod === method.id" class="w-2 h-2 rounded-full bg-white"></div>
@@ -87,17 +88,17 @@ const loading = ref(true)
 const selectedMethod = ref<PaymentMethod | null>(null)
 const isSubmitting = ref(false)
 
-const paymentMethods: { id: PaymentMethod; name: string; description: string; icon: string }[] = [
-  { id: 'qris', name: 'QRIS', description: 'Gopay, OVO, Dana, LinkAja, ShopeePay', icon: 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_QRIS.svg' },
-  { id: 'bri_va', name: 'BRI Virtual Account', description: 'Transfer Bank BRI', icon: 'https://upload.wikimedia.org/wikipedia/commons/2/2e/BRI_Logo.svg' },
-  { id: 'bni_va', name: 'BNI Virtual Account', description: 'Transfer Bank BNI', icon: 'https://upload.wikimedia.org/wikipedia/commons/0/03/BNI_logo.svg' },
-  { id: 'cimb_niaga_va', name: 'CIMB Niaga Virtual Account', description: 'Transfer Bank CIMB Niaga', icon: 'https://upload.wikimedia.org/wikipedia/commons/5/5c/Logo_CIMB_Niaga.svg' },
-  { id: 'permata_va', name: 'Permata Virtual Account', description: 'Transfer Bank Permata', icon: 'https://upload.wikimedia.org/wikipedia/commons/8/84/Permatabank_logo.svg' },
-  { id: 'maybank_va', name: 'Maybank Virtual Account', description: 'Transfer Maybank', icon: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Maybank_Logo.svg' },
-  { id: 'sampoerna_va', name: 'Sampoerna Virtual Account', description: 'Transfer Bank Sampoerna', icon: '' },
-  { id: 'bnc_va', name: 'BNC Virtual Account', description: 'Transfer Bank Neo Commerce', icon: '' },
-  { id: 'atm_bersama_va', name: 'ATM Bersama Virtual Account', description: 'Transfer via ATM Bersama', icon: '' },
-  { id: 'artha_graha_va', name: 'Artha Graha Virtual Account', description: 'Transfer Bank Artha Graha', icon: '' },
+const paymentMethods: { id: PaymentMethod; name: string; description: string; icon: string; feeLabel: string }[] = [
+  { id: 'qris', name: 'QRIS', description: 'Gopay, OVO, Dana, LinkAja, ShopeePay', icon: 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_QRIS.svg', feeLabel: 'Biaya admin: 0,7% + Rp 310' },
+  { id: 'bri_va', name: 'BRI Virtual Account', description: 'Transfer Bank BRI', icon: 'https://upload.wikimedia.org/wikipedia/commons/2/2e/BRI_Logo.svg', feeLabel: 'Biaya admin: Rp 3.500' },
+  { id: 'bni_va', name: 'BNI Virtual Account', description: 'Transfer Bank BNI', icon: 'https://upload.wikimedia.org/wikipedia/commons/0/03/BNI_logo.svg', feeLabel: 'Biaya admin: Rp 3.500' },
+  { id: 'cimb_niaga_va', name: 'CIMB Niaga Virtual Account', description: 'Transfer Bank CIMB Niaga', icon: 'https://upload.wikimedia.org/wikipedia/commons/5/5c/Logo_CIMB_Niaga.svg', feeLabel: 'Biaya admin: Rp 3.500' },
+  { id: 'permata_va', name: 'Permata Virtual Account', description: 'Transfer Bank Permata', icon: 'https://upload.wikimedia.org/wikipedia/commons/8/84/Permatabank_logo.svg', feeLabel: 'Biaya admin: Rp 3.500' },
+  { id: 'maybank_va', name: 'Maybank Virtual Account', description: 'Transfer Maybank', icon: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Maybank_Logo.svg', feeLabel: 'Biaya admin: Rp 3.500' },
+  { id: 'sampoerna_va', name: 'Sampoerna Virtual Account', description: 'Transfer Bank Sampoerna', icon: '', feeLabel: 'Biaya admin: Rp 2.000' },
+  { id: 'bnc_va', name: 'BNC Virtual Account', description: 'Transfer Bank Neo Commerce', icon: '', feeLabel: 'Biaya admin: Rp 3.500' },
+  { id: 'atm_bersama_va', name: 'ATM Bersama Virtual Account', description: 'Transfer via ATM Bersama', icon: '', feeLabel: 'Biaya admin: Rp 3.500' },
+  { id: 'artha_graha_va', name: 'Artha Graha Virtual Account', description: 'Transfer Bank Artha Graha', icon: '', feeLabel: 'Biaya admin: Rp 2.000' },
 ]
 
 const formatNumber = (num: number) => {

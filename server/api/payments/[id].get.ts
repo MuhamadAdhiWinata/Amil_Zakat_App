@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
   const payment = await paymentRepository.findById(id)
   if (!payment) throw createError({ statusCode: 404, message: 'Payment not found' })
 
-  const mapPayment = (p: typeof payment) => ({ ...p, amount: Number(p.amount) })
+  const mapPayment = (p: typeof payment) => ({ ...p, amount: Number(p.amount), fee: p.fee ? Number(p.fee) : undefined, totalPayment: p.totalPayment ? Number(p.totalPayment) : undefined })
 
   // Auto-sync with Pakasir if still PENDING
   if (payment.status === 'PENDING' && payment.gatewayOrderId) {

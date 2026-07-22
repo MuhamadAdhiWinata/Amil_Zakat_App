@@ -42,10 +42,22 @@
           </div>
         </div>
 
-        <!-- Amount -->
-        <div class="bg-white rounded-2xl p-4 shadow-sm flex justify-between items-center">
-          <span class="text-sm text-slate-600 font-medium">Total Tagihan</span>
-          <span class="text-lg font-bold text-slate-800">Rp {{ formatNumber(Number(payment.amount)) }}</span>
+        <!-- Amount Breakdown -->
+        <div class="bg-white rounded-2xl p-4 shadow-sm">
+          <div class="space-y-2">
+            <div class="flex justify-between text-sm">
+              <span class="text-slate-600">Donasi</span>
+              <span class="text-slate-800">Rp {{ formatNumber(Number(payment.amount)) }}</span>
+            </div>
+            <div v-if="payment.fee" class="flex justify-between text-sm">
+              <span class="text-slate-600">Biaya Admin</span>
+              <span class="text-slate-800">Rp {{ formatNumber(Number(payment.fee)) }}</span>
+            </div>
+            <div class="border-t border-dashed border-slate-200 pt-2 flex justify-between items-center">
+              <span class="text-sm font-bold text-slate-700">Total Tagihan</span>
+              <span class="text-lg font-bold text-primary">Rp {{ formatNumber(Number(payment.totalPayment || payment.amount)) }}</span>
+            </div>
+          </div>
         </div>
 
         <!-- ID Pembayaran -->
