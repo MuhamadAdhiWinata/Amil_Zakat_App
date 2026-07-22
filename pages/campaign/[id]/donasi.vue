@@ -103,7 +103,7 @@ const presets = [10000, 20000, 50000, 100000, 500000, 1000000]
 
 const isValid = computed(() => {
   const amount = parseInt(amountRaw.value)
-  if (isNaN(amount) || amount < 10000) return false
+  if (isNaN(amount) || amount < 1) return false
   if (!isLoggedIn.value && guestName.value.trim().length < 3) return false
   return true
 })
@@ -123,8 +123,8 @@ const handleDonate = async () => {
       body: {
         amount,
         campaignId: route.params.id,
-        donaturName: isLoggedIn.value ? user?.name : guestName.value,
-        donaturEmail: isLoggedIn.value ? user?.email : guestEmail.value,
+        donaturName: isLoggedIn.value ? user.value?.name : guestName.value,
+        donaturEmail: isLoggedIn.value ? user.value?.email : guestEmail.value,
         isAnonymous: isAnonymous.value
       }
     })
