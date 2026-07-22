@@ -22,6 +22,7 @@
           placeholder="0"
           class="mb-4"
         />
+        <p class="text-xs text-slate-500 -mt-3 mb-4">Minimal donasi Rp 500</p>
 
         <div class="grid grid-cols-2 gap-2">
           <button 
@@ -103,7 +104,7 @@ const presets = [10000, 20000, 50000, 100000, 500000, 1000000]
 
 const isValid = computed(() => {
   const amount = parseInt(amountRaw.value)
-  if (isNaN(amount) || amount < 1) return false
+  if (isNaN(amount) || amount < 500) return false
   if (!isLoggedIn.value && guestName.value.trim().length < 3) return false
   return true
 })

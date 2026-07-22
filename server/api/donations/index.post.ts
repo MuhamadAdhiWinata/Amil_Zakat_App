@@ -21,6 +21,14 @@ export default defineEventHandler(async (event) => {
     }
   }
 
+  const amount = Number(body.amount)
+  if (!amount || amount < 500) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Nominal donasi minimal Rp 500'
+    })
+  }
+
   try {
     const donation = await paymentService.initiateDonation({
       campaignId: body.campaignId,

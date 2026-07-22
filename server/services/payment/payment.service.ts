@@ -39,6 +39,10 @@ export class PaymentService {
     const donation = await donationRepository.findById(donationId)
     if (!donation) throw new Error('Donation not found')
 
+    if (Number(donation.amount) < 500) {
+      throw new Error('Nominal donasi minimal Rp 500')
+    }
+
     const paymentId = crypto.randomUUID()
     const gatewayOrderId = `INV-${Date.now()}-${Math.floor(Math.random() * 1000)}`
 
